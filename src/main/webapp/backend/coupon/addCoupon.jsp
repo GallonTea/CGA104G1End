@@ -53,7 +53,8 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
 
     <link rel="stylesheet" type="text/css" href="../../resources/static/css/orderDetails.css"/>
-
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/static/css/orderDetails.css"/>
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/static/css/backendDetail.css"/>
     <link rel="stylesheet" type="text/css" href="../../resources/static/css/backendDetail.css"/>
     <style>
         body {

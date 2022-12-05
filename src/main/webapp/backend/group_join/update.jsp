@@ -14,7 +14,28 @@
 
 <style>
 
+table {
+	margin-left:5%;
+	width: 900px;
+	height: 300px;
+}
 
+.titleIn {
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.subBlock {
+margin-left: 5%;
+}
+
+.btnSmall{
+	width: 100px;
+}
+
+.field{
+	margin-left: 98px;
+}
 </style>
 
 </head>
@@ -23,11 +44,9 @@
 	<main>
 		<%@include file="/backend/leftside.jsp"%>
 		<section>
+		<div class="titleBlock">
 			<h3>參團資料修改:<font color=red>${errorMsgs.gb_id}</font> </h3>
-	<FORM METHOD="post" ACTION="/CGA104G1/Group_Join_backServlet" >
-				<input type= submit value="取消" class = "back"  > 
-				<input type="hidden" name="action" value="getOne_Display_ByEmp">
-	</FORM>
+		</div>
 
 
 	<FORM METHOD="post" name="form1">
@@ -74,7 +93,7 @@
 				<td>購買數量:<font color=red><b>*</b></font></td>
 				<td><input  class="field" type="number" name="gbbuy_amount" min="1" max="${group_joinVO.group_BuyVO.gb_min - nowamount}" required
 				 size="45" value="${group_joinVO.gbbuy_amount}" />
-					<input   type="button"  class="field2" value="計算價格" onclick="price()"><font color=red>${errorMsgs.gbbuy_amount}</font>
+					<input   type="button"  class="field2 btn btn-info btnIn btnSmall" value="計算價格" onclick="price()"><font color=red>${errorMsgs.gbbuy_amount}</font>
 			</tr>
 			
 			<tr>
@@ -89,7 +108,11 @@
 					value="${group_joinVO.deliver_status}" readonly /><input
 			type="hidden" name="gb_id" value="${group_joinVO.gb_id}">
 			<input type="hidden" name="mem_id" value="${group_joinVO.mem_id}"> 
-			<div id ="yesboss"><input  class="btn btn-warning" type="button"  value="確認更改"  onclick="update()"></div>
+			<div id ="yesboss subBlock">
+			&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+			&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+			<input  class="btn btn-success btnIn" type="button"  value="確認更改"  onclick="update()">
+			</div>
 	</FORM>
 		</section>
 	</main>

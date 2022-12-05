@@ -3,6 +3,7 @@
 <%@page import="com.mem.model.MemVO"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
+<%@include file="/frontend/frontNavbar.jsp"%>
 <%
 MemVO memVO = (MemVO) request.getAttribute("memVO");
 EmpService empSvc = new EmpService();
@@ -283,9 +284,4 @@ session.setAttribute("list", list);
 	}
 </script>
 
-<!--  NavBar  -->
-<script src="../../resources/static/js/navbar.js"></script>
-<script type="text/javascript" src="../../resources/static/js/getName.js"></script>
-<!--  Cart -->
-<script type="text/javascript" src="../../resources/static/js/cart.js"></script>
 </html>

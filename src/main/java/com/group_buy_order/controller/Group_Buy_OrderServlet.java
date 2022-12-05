@@ -1,6 +1,9 @@
 package com.group_buy_order.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -16,6 +19,12 @@ import com.group_buy.model.Group_BuyService;
 import com.group_buy.model.Group_BuyVO;
 import com.group_buy_order.model.Group_Buy_OrderService;
 import com.group_buy_order.model.Group_Buy_OrderVO;
+
+import core.util.UUIDGenerator;
+import ecpay.payment.integration.AllInOne;
+import ecpay.payment.integration.domain.AioCheckOutALL;
+
+import static java.lang.System.out;
 
 @WebServlet("/Group_Buy_OrderServlet")
 public class Group_Buy_OrderServlet extends HttpServlet {
@@ -67,27 +76,53 @@ public class Group_Buy_OrderServlet extends HttpServlet {
 
 		if ("update_paying".equals(action)) {
 
+		
 			Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 
 			/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 **********************/
-
 			Integer gborder_id = Integer.valueOf(req.getParameter("gborder_id").trim());
-
-			Group_Buy_OrderVO group_buy_orderVO = new Group_Buy_OrderVO();
-
-			group_buy_orderVO.setGborder_id(gborder_id);
-
-			/*************************** 2.開始修改資料 *****************************************/
+			
 			Group_Buy_OrderService group_buy_OrderSvc = new Group_Buy_OrderService();
-			group_buy_orderVO = group_buy_OrderSvc.update_paying(gborder_id);
 
+			Group_Buy_OrderVO group_buy_orderVO = group_buy_OrderSvc.getOneEmp(gborder_id);
+				
+			 StringBuffer sb = new StringBuffer();
+		        String url = sb.append(req.getScheme()).append("://")
+		                .append(req.getServerName()).append(":")
+		                .append(req.getServerPort())
+		                .append(req.getContextPath()).toString();
+			
+		 	   Date date = new Date();
+		        SimpleDateFormat sd = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		        String orderDate = sd.format(date);
+		        String indexUrl = url + "/frontend/index.html";
+		        String returnUrl = url + "/EcpayReturn";
+
+		        AllInOne allInOne = new AllInOne("");
+		        AioCheckOutALL obj = new AioCheckOutALL();
+		        obj.setMerchantTradeNo(String.valueOf(gborder_id) + "br" + UUIDGenerator.getUUID()); // 訂單id+br+亂碼16位
+		        obj.setMerchantTradeDate(orderDate); // 交易時間
+		        obj.setTotalAmount(String.valueOf(group_buy_orderVO.getGb_endprice())); // 訂單總金額
+		        obj.setTradeDesc("A test order."); // 訂單描述
+		        obj.setItemName(group_buy_orderVO.getReceiver_name() + " 的 Barei 團購訂單，訂單編號: " + gborder_id); // 商品項目
+		        obj.setReturnURL(indexUrl);
+		        obj.setClientBackURL(indexUrl);
+		        obj.setOrderResultURL(returnUrl);
+		        obj.setNeedExtraPaidInfo("N");
+
+		       String form = allInOne.aioCheckOut(obj, null);
+		       out.print(form);
+			
 			/*************************** 3.修改完成,準備轉交(Send the Success view) *************/
 			group_buy_orderVO = group_buy_OrderSvc.getOneEmp(gborder_id);
 
+			
+
+			
 			req.setAttribute("group_buy_orderVO", group_buy_orderVO);
 
-			String url = "/frontend/group_buy_order/listOneGroup_Buy_Order_byMaster.jsp";
+//			String url = "/frontend/group_buy_order/listOneGroup_Buy_Order_byMaster.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 		}
@@ -374,7 +409,14 @@ public class Group_Buy_OrderServlet extends HttpServlet {
 				errorMsgs.put("receiver_name", "收件人請勿留白");
 			}
 
-			String receiver_address = zipcode+"  "+city+dist+address;
+
+			
+			String receiver_address = req.getParameter("receiver_address");
+			if (receiver_address == null || receiver_address.trim().length() == 0) {
+
+				errorMsgs.put("receiver_phone", "電話請勿留白");
+			}
+
 		
 			String receiver_phone = req.getParameter("receiver_phone");
 			if (receiver_phone == null || receiver_phone.trim().length() == 0) {
@@ -437,41 +479,43 @@ public class Group_Buy_OrderServlet extends HttpServlet {
 			Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
 			req.setAttribute("errorMsgs", errorMsgs);
 			/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 **********************/
-//			String gb_name = req.getParameter("gb_name");
+//		
 			Integer gbitem_id = Integer.valueOf(req.getParameter("gbitem_id"));
 			Integer gb_id = Integer.valueOf(req.getParameter("gb_id"));
-//			String gbitem_name = req.getParameter("gbitem_name");
-//			String gbitem_content = req.getParameter("gbitem_content");
-//			Integer gbitem_price = Integer.valueOf(req.getParameter("gbitem_price"));
-//			Integer gbitem_status = Integer.valueOf(req.getParameter("gbitem_status"));
-//			Integer gb_min = Integer.valueOf(req.getParameter("gb_min"));
-//			Integer gb_price = Integer.valueOf(req.getParameter("gb_price"));
+//		
 
-			if (!errorMsgs.isEmpty()) {
-				RequestDispatcher failureView = req.getRequestDispatcher("/backend/##團購團");
-				failureView.forward(req, res);
-				return;// 程式中斷
-			}
 
 			/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
 
 			Group_Buy_OrderVO group_buy_orderVO = new Group_Buy_OrderVO();
 
+			
+			
+			Group_Buy_OrderService Group_Buy_OrderService = new Group_Buy_OrderService();
+			group_buy_orderVO = Group_Buy_OrderService.getOneEmp(gb_id);
+			
+			Group_BuyService group_buySvc = new Group_BuyService();
+			Group_BuyVO group_buyVO = group_buySvc.getOneGroup_Buy(gb_id);
+			System.out.print(group_buyVO);
+			
+			if(group_buy_orderVO!=null) {
+				
+				Group_Buy_OrderService group_buy_OrderSvc = new Group_Buy_OrderService();
+				group_buy_orderVO = group_buy_OrderSvc.getOneEmp(gb_id);
+				
+				
+				req.setAttribute("group_buy_orderVO", group_buy_orderVO);
+				String url = "/frontend/group_buy_order/listOneGroup_Buy_Order_byMaster.jsp";
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp
+				successView.forward(req, res);
+				return;
+			}
+			group_buy_orderVO = new Group_Buy_OrderVO();
 			group_buy_orderVO.setGb_id(gb_id);
 			group_buy_orderVO.setGbitem_id(gbitem_id);
-
+			
 			req.setAttribute("group_buy_orderVO", group_buy_orderVO);
-
-//			session.setAttribute("gb_min", gb_min);
-//			session.setAttribute("gb_price", gb_price);
-//			session.setAttribute("gb_id", gb_id);
-//			session.setAttribute("gb_name", gb_name);
-//			session.setAttribute("gbitem_id", gbitem_id);
-//			session.setAttribute("gbitem_name", gbitem_name);
-//			session.setAttribute("gbitem_content", gbitem_content);
-//			session.setAttribute("gbitem_price", gbitem_price);
-//			session.setAttribute("gbitem_status", gbitem_status);
-
+			req.setAttribute("group_buyVO", group_buyVO);
 			String url = "/frontend/group_buy_order/addGroup_Buy_Order.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEmp.jsp
 			successView.forward(req, res);

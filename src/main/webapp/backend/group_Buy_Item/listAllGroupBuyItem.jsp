@@ -106,21 +106,6 @@ tr:nth-child(even) {
 </body>
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
 <!-- <script type="text/javascript"> -->
-// 	var gbitemStatus = ["超出團購期限下架", "上架中", "無庫存", "有庫存"];
-// 	var txt = "";
-
-
-
-
-// 	$(document).ready(function(){
-// 		if($("td:nth-child(5)") == 0){
-// 			$("td:nth-child(5)").after("超出團購期限下架")
-// 		}
-// 		  });
-
-// 	console.log(
-// 			$("td:nth-child(5)").after("超出團購期限下架")
-// 		  	);
 
 
 <!-- </script> -->

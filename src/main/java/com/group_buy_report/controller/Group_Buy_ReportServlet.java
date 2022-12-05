@@ -258,7 +258,7 @@ public class Group_Buy_ReportServlet extends HttpServlet{
 
 			if (!errorMsgs.isEmpty()) {
 				req.setAttribute("Group_Buy_ReportVO", Group_Buy_ReportVO);
-				RequestDispatcher failureView = req.getRequestDispatcher("/frontend/group_report/addGroup_Buy_Report.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/frontend/group_buy_report/addGroup_Buy_Report.jsp");
 				failureView.forward(req, res);
 				return;
 			}

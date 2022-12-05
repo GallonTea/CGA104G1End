@@ -269,6 +269,8 @@ public class EmpServlet extends HttpServlet {
 			/*************************** 2.開始新增資料 ***************************************/
 			empSvc = new EmpService();
 			empVO = empSvc.addEmp(emp_name, account, password, onjob_date, emp_status, effect_id);
+			
+	
 			/*************************** 3.新增完成,準備轉交(Send the Success view) ***********/
 			String url = "/backend/emp/listAllEmp.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllEmp.jsp
@@ -288,9 +290,11 @@ public class EmpServlet extends HttpServlet {
 			/*************************** 2.開始刪除資料 ***************************************/
 			EmpService empSvc = new EmpService();
 			empSvc.deleteEmp(empno);
+			
+		
 
 			/*************************** 3.刪除完成,準備轉交(Send the Success view) ***********/
-			String url = "/backend/emp/listAllEmpNoEffect.jsp";
+			String url = "/backend/emp/listAllEmp.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);// 刪除成功後,轉交回送出刪除的來源網頁
 			successView.forward(req, res);
 		}
@@ -315,7 +319,7 @@ public class EmpServlet extends HttpServlet {
 			}
 
 			req.setAttribute("listemp_and_effect", list);
-			RequestDispatcher successView = req.getRequestDispatcher("/backend/emp/listAllEmpNoEffect.jsp");
+			RequestDispatcher successView = req.getRequestDispatcher("/backend/emp/listAllEmp.jsp");
 			successView.forward(req, res);
 
 		}

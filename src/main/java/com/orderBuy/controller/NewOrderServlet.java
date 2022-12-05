@@ -251,6 +251,7 @@ public class NewOrderServlet extends HttpServlet {
 
             jsonMsg.put("payErr", "系統繁忙中，請重新確認");
             pw.print(jsonMsg);
+            return;
         }
     }
 }

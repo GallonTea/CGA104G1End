@@ -137,48 +137,49 @@ public class Emp_effectSevlet extends HttpServlet {
 		}
 		if ("insert".equals(action)) {
 
-			Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
-			req.setAttribute("errorMsgs", errorMsgs);
+			   Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
+			   req.setAttribute("errorMsgs", errorMsgs);
 
-			/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 **********************/
+			   /*************************** 1.接收請求參數 - 輸入格式的錯誤處理 **********************/
 
-			Integer emp_id = Integer.valueOf(req.getParameter("emp_id").trim());
-			if (emp_id == null) {
-				errorMsgs.put("emp_id", "請勿空白");
-			}
+			   Integer emp_id = Integer.valueOf(req.getParameter("emp_id").trim());
+			   if (emp_id == null) {
+			    errorMsgs.put("emp_id", "請勿空白");
+			   }
 
-			Integer effect_id = Integer.valueOf(req.getParameter("effect_id").trim());
-			if (effect_id == null) {
-				errorMsgs.put("effect_id", "請勿空白");
-			}
-			Emp_effectService emp_effectSvc = new Emp_effectService();
-			Emp_effectVO emp_effectVO = new Emp_effectVO();
-			
-			if(emp_effectSvc.getEffect(emp_id, effect_id)!=null) {
-				errorMsgs.put("effect_id", "權限已有,請勿重複加入");
-			}
-			
-			emp_effectVO.setEmp_id(emp_id);
-			emp_effectVO.setEffect_id(effect_id);
+			   Integer effect_id = Integer.valueOf(req.getParameter("effect_id").trim());
+			   if (effect_id == null) {
+			    errorMsgs.put("effect_id", "請勿空白");
+			   }
+			   Emp_effectService emp_effectSvc = new Emp_effectService();
+			   Emp_effectVO emp_effectVO = new Emp_effectVO();
+			   
+			   if(emp_effectSvc.getEffect(emp_id, effect_id)!=null) {
+			    errorMsgs.put("effect_id", "權限已有,請勿重複加入");
+			   }
+			   
+			   emp_effectVO.setEmp_id(emp_id);
+			   emp_effectVO.setEffect_id(effect_id);
 
-			if (!errorMsgs.isEmpty()) {
-				req.setAttribute("emp_effectVO", emp_effectVO);
-				RequestDispatcher fail = req.getRequestDispatcher("/backend/emp_effect/addEmp_Effect.jsp");
-				fail.forward(req, res);
-				return; // 程式中斷
-			}
+			   if (!errorMsgs.isEmpty()) {
+			    req.setAttribute("emp_effectVO", emp_effectVO);
+			    RequestDispatcher fail = req.getRequestDispatcher("/backend/emp_effect/addEmp_Effect.jsp");
+			    fail.forward(req, res);
+			    return; // 程式中斷
+			   }
 
-			/*************************** 2.開始修改資料 *****************************************/
-			emp_effectSvc = new Emp_effectService();
-			emp_effectVO = emp_effectSvc.addEmp(emp_id, effect_id);
-
-			/*************************** 3.修改完成,準備轉交(Send the Success view) *************/
-			req.setAttribute("emp_effectVO", emp_effectVO);
-			req.setAttribute("emp_id", emp_id);// 資料庫update成功後,正確的的empVO物件,存入req
-			String url = "/backend/emp_effect/listOneEmp_Effect.jsp";
-			RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
-			successView.forward(req, res);
-		}
+			   /*************************** 2.開始修改資料 *****************************************/
+			   emp_effectSvc = new Emp_effectService();
+			   emp_effectVO = emp_effectSvc.addEmp(emp_id, effect_id);
+			    emp_effectSvc = new Emp_effectService();
+			   List<Emp_effectVO> emp_effectVO1 = emp_effectSvc.getOneEmp(emp_id);
+			   /*************************** 3.修改完成,準備轉交(Send the Success view) *************/
+			   req.setAttribute("emp_effectVO", emp_effectVO1);
+			   req.setAttribute("emp_id", emp_id);// 資料庫update成功後,正確的的empVO物件,存入req
+			   String url = "/backend/emp_effect/listOneEmp_Effect.jsp";
+			   RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
+			   successView.forward(req, res);
+			  }
 		if ("go_Insert".equals(action)) {
 
 			Map<String, String> errorMsgs = new LinkedHashMap<String, String>();

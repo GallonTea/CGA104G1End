@@ -274,12 +274,12 @@ padding: 0;
 							ACTION="<%=request.getContextPath()%>/Group_Buy_OrderServlet"
 							style="margin-bottom: 0px;">
 
-							<c:if test="${Group_BuyVO.gb_min <= Group_BuyVO.gb_amount}">
-								<input class="btn btn-success btnSmall" type="submit" value="立即結帳">
-							</c:if>
-							<c:if test="${Group_BuyVO.gb_min > Group_BuyVO.gb_amount}">
-								<input class="btn btn-success btnSmall" type="submit" value="立即結帳" disabled="disabled">
-							</c:if>
+							  <c:if test="${Group_BuyVO.gb_min <= Group_BuyVO.gb_amount}">
+						        <input type="submit" value="立即結帳">
+						       </c:if>
+						       <c:if test="${Group_BuyVO.gb_min > Group_BuyVO.gb_amount}">
+						        <input type="submit" value="立即結帳" disabled="disabled">
+						       </c:if>
 
 
 							<input type="hidden" name="gb_price"

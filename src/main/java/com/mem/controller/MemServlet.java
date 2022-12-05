@@ -661,6 +661,13 @@ public class MemServlet extends HttpServlet {
             failureViewpw.forward(req, res);
 
         }
+        
+        if ("logout".equals(action)) {
+			session.invalidate();
+			String url = "/frontend/memLogin/login.jsp";
+			RequestDispatcher successView = req.getRequestDispatcher(url);
+			successView.forward(req, res);
+		}
     }
 }
 

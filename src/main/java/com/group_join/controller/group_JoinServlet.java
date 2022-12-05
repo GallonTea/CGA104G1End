@@ -375,41 +375,48 @@ public class group_JoinServlet extends HttpServlet {
 
 		if ("getOneGB_For_Display".equals(action)) {
 
-			Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
-			req.setAttribute("errorMsgs", errorMsgs);
+			   Map<String, String> errorMsgs = new LinkedHashMap<String, String>();
+			   req.setAttribute("errorMsgs", errorMsgs);
 
-			/*************************** 1.接收請求參數 - 輸入格式的錯誤處理 **********************/
+			   /*************************** 1.接收請求參數 - 輸入格式的錯誤處理 **********************/
 
-			Integer gb_id = null;
-			Integer mem_id = (Integer) session.getAttribute("mem_id");
-			Group_BuyService group_buySvc = new Group_BuyService();
-			List<Group_BuyVO> group_buyVO = group_buySvc.joinGBIGetAllWhereMemID(mem_id);
-			for (Group_BuyVO gb : group_buyVO) {
-				gb_id = gb.getGb_id();
+			   Integer gb_id = null;
+			   Integer mem_id = (Integer) session.getAttribute("mem_id");
+			   Group_BuyService group_buySvc = new Group_BuyService();
+			   List<Group_BuyVO> group_buyVO = group_buySvc.joinGBIGetAllWhereMemID(mem_id);
+			   for (Group_BuyVO gb : group_buyVO) {
+			    gb_id = gb.getGb_id();
 
-				System.out.println(mem_id + "喔喔");
-			}
-			Group_JoinService group_joinSvc = new Group_JoinService();
-			List<Group_JoinVO> group_joinVO = group_joinSvc.getOneGb(gb_id);
-			/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
+			    System.out.println(mem_id + "喔喔");
+			   }
+			   Group_BuyVO group_buyVO1 = group_buySvc.getOneGroup_Buy(gb_id);
+			   Integer  amount = group_buyVO1.getGb_min()-group_buyVO1.getGb_amount();
+			   
+			   
+			   
+			   
+			   Group_JoinService group_joinSvc = new Group_JoinService();
+			   List<Group_JoinVO> group_joinVO = group_joinSvc.getOneGb(gb_id);
+			   /*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
 
-			boolean verify = true;
-			req.setAttribute("gb_id", gb_id);
-			session.setAttribute("group_joinVO", group_joinVO);
-			for (Group_JoinVO a : group_joinVO) {
-				if (a.getGbpay_status() != 1 || a.getPickup_status() != 1 || a.getDeliver_status() != 3) {
-					verify = false;
-				}
+			   boolean verify = true;
+			   req.setAttribute("gb_id", gb_id);
+			   req.setAttribute("amount", amount);
+			   session.setAttribute("group_joinVO", group_joinVO);
+			   for (Group_JoinVO a : group_joinVO) {
+			    if (a.getGbpay_status() != 1 || a.getPickup_status() != 1 || a.getDeliver_status() != 3) {
+			     verify = false;
+			    }
 
-			}
-			session.setAttribute("verify", verify);
+			   }
+			   session.setAttribute("verify", verify);
 
-			System.out.println(verify);
+			   System.out.println(verify);
 
-			String url = "/frontend/group_join/listAllGroupJoin.jsp";
-			RequestDispatcher successView = req.getRequestDispatcher(url);
-			successView.forward(req, res);
-		}
+			   String url = "/frontend/group_join/listAllGroupJoin.jsp";
+			   RequestDispatcher successView = req.getRequestDispatcher(url);
+			   successView.forward(req, res);
+			  }
 		// 團員進入更改
 		if ("goUpdateByMem".equals(action)) {
 

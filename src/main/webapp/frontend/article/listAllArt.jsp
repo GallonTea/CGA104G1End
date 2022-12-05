@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.article.model.*" %>
 <%@ page import="com.article.model.*" %>
+<%@include file="/frontend/frontNavbar.jsp"%>
 
 <!DOCTYPE html>
 <html>
@@ -107,14 +108,5 @@
     </div>
 </div>
 
-<!--  NavBar  -->
-<script src="../../resources/static/js/navbar.js"></script>
-<!--  Footer  -->
-<script src="../../resources/static/js/footer.js"></script>
-</body>
-
-<script type="text/javascript" src="../../resources/static/js/getName.js"></script>
-<!--  Cart -->
-<script type="text/javascript" src="../../resources/static/js/cart.js"></script>
 
 </html>

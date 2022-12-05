@@ -11,22 +11,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
-    <!-- import jquery-3.6.0 -->
-    <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://demeter.5fpro.com/tw/zipcode-selector.js"></script>
     <!-- import font-style -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300&display=swap" rel="stylesheet">
 
+    <!-- import css stylesheet -->
+
+    <!-- import jquery-3.6.0 -->
+    <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://demeter.5fpro.com/tw/zipcode-selector.js"></script>
+
     <!-- import icon -->
     <script src="https://kit.fontawesome.com/b5ef6b60f3.js" crossorigin="anonymous"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="https://unpkg.com/vue@3"></script>
     <script src="https://unpkg.com/vue-router@4"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/qs/6.11.0/qs.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link rel="stylesheet" type="text/css" href="../../resources/static/css/main.css"/>
 
@@ -275,7 +278,7 @@
         mounted() {
             let cart = sessionStorage.getItem('part')
             this.orderItems = JSON.parse(cart)
-            if (!cart || this.orderItems.length === 0) {
+            if (!cart || this.orderItems.length === 0 ) {
                 Swal.fire({
                     icon: 'error',
                     title: '你的購物車還沒有東西喔!',
@@ -341,7 +344,7 @@
                                 })
                                 this.result = res.data
                                 $("#orderForm").html(res.data)
-                                if (this.result.length === 0) {
+                                if (!"#orderForm") {
                                     sessionStorage.removeItem('part')
                                 }
                             })

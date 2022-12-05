@@ -54,7 +54,7 @@ const navbar = `
                         </ul>
                     </li>
                         <li class="nav-item">
-                        <a class="nav-link" href="/CGA104G1/frontend/question/question.html">常見問題 Q&A</a>
+                        <a class="nav-link" href="/CGA104G1/frontend/question/question.jsp">常見問題 Q&A</a>
                     </li>
                 </ul>
                 <div id="memberName"></div>

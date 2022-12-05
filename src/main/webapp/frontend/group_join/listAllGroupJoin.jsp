@@ -248,7 +248,7 @@ tr:nth-child(even) {
 						</FORM>
 						<div style="display:inline-block; width: 69%;"></div>&ensp;
 						<FORM METHOD="post" ACTION="/CGA104G1/Group_JoinServlet" style="display:inline-block" class = "ok">
-							<input class="btn btn-success" type= "${verify==true ? 'submit' : 'hidden'}" value="去完成團購團" >
+							<input class="btn btn-success" type= "${(verify==true&& amount==0) ? 'submit' : 'hidden'}" value="去完成團購團" >
 							<input type="hidden" name="gb_id" value="${gb_id}">
 							<input type="hidden" name="action" value="update_gb_status">
 						</FORM>

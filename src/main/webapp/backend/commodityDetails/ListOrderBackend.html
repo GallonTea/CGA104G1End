@@ -30,6 +30,8 @@
     <link rel="stylesheet" type="text/css" href="../../resources/static/css/orderDetails.css"/>
     <link rel="stylesheet" type="text/css" href="../../resources/static/css/backendDetail.css"/>
     <link rel="stylesheet" href="../../resources/templates/assets/css/style.css">
+    <link rel="stylesheet" href="../../resources/static/css/backend.css">
+    <link rel="stylesheet" href="../../resources/static/css/backendStyle.css">
     <link rel="stylesheet" href="../../resources/templates/assets/vendors/mdi/css/materialdesignicons.min.css">
     <style>
         ul.nav {
@@ -257,7 +259,7 @@
                                 <th>Action</th>
                             </tr>
                             </thead>
-                            <tbody v-for="(details, index) in filterStatus" :key="details.ITEM_ID"
+                            <tbody v-for="(details, index) in filterStatus" :key="details.ORDER_ID"
                             >
                             <tr>
                                 <td>{{ details.ORDER_ID }}</td>
@@ -267,7 +269,8 @@
                                 <td>{{ statusFilter(details.ORDER_STATUS) }}</td>
                                 <td>NT$ {{ details.FINAL_PRICE }}</td>
                                 <td>
-                                    <button @click="viewDetail(details, index)" class="btn btn-outline-info view"
+                                    <button @click="viewDetail(details, details.ORDER_ID, details.ORDER_STATUS, index)"
+                                            class="btn btn-outline-info view"
                                             title="View Details"
                                             data-bs-target="#myModal" data-bs-toggle="modal"
                                             data-toggle="tooltip"><i
@@ -300,7 +303,8 @@
             <div class="py-2">
                 <div class="modal modal-lg fade" id="myModal">
                     <div class="modal-dialog">
-                        <div class="modal-content row d-flex justify-content-center" style="margin-top: 110px; margin-left: 70px">
+                        <div class="modal-content row d-flex justify-content-center"
+                             style="margin-top: 110px; margin-left: 70px">
                             <div class="modal-header">
                                 <h5 class="modal-title">訂單詳情</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -308,7 +312,7 @@
                             </div>
                             <br>
 
-                            <h4>{{ statusFilter(tmpStatus) }}</h4>
+                            <h4>{{ statusLg }}</h4>
                             <!--  後台人員操作訂單  -->
                             <div v-if="tmpStatus === '2'"
                                  class="d-flex justify-content-end gap-2">
@@ -393,7 +397,8 @@
                 filterSta: '',
                 statusSelect: '',
                 details: [],
-                detail: []
+                detail: [],
+                tmp: []
             }
         },
         beforeCreate() {
@@ -433,17 +438,17 @@
 
                 }
             },
-            viewDetail: function (details, index) {
+            viewDetail: function (details, orderId, orderStatus, index) {
                 var qs = Qs
                 axios.post('/CGA104G1/MoreDetailsServlet', qs.stringify({
-                    orderId: this.details[index].ORDER_ID
+                    orderId: orderId
                 }))
                     .then(res => {
                         console.log(res);
                         this.detail = res.data;
+                        this.tmpOrderId = orderId.toString();
+                        this.tmpStatus = orderStatus.toString();
                         this.tmpOther = this.details[index].ORDER_OTHER.replace(/(\r\n)|(\n)/g, '<br>');
-                        this.tmpStatus = this.details[index].ORDER_STATUS;
-                        this.tmpOrderId = this.details[index].ORDER_ID;
                     })
                     .catch(err => {
                         console.log(err);
@@ -595,7 +600,30 @@
             filterStatus() {
                 return this.details.filter(result => result.ORDER_STATUS.match(this.filterSta))
             },
-            totalReturnTask() {
+            statusLg() {
+                switch (this.tmpStatus) {
+                    case '0':
+                        return '🟠 等待付款中'
+                    case '1':
+                        return '⚫ 未完成付款，訂單自動取消'
+                    case '2':
+                        return '🔵 完成付款，準備出貨中'
+                    case '3':
+                        return '⚪ 正在運輸途中'
+                    case '4':
+                        return '🟥 取消訂單審核中'
+                    case '5':
+                        return '🟡 未取貨，退回平台'
+                    case '6':
+                        return '🟢 已完成取貨'
+                    case '7':
+                        return '🟦 退/換貨申請中'
+                    case '8':
+                        return '🔵 退/換貨處理中'
+                    default:
+                        return '⚫ 訂單已取消'
+
+                }
             }
         }
     });
